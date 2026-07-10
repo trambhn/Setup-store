@@ -567,17 +567,14 @@ function MainStoreSelectView({
       fontWeight: 600,
       marginBottom: 4
     }
-  }, "Do you have any of these online stores?"), /*#__PURE__*/React.createElement("div", {
+  }, "Do you have an existing online store?"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 13,
       color: theme.color.textSecondary,
       lineHeight: 1.5
     }
-  }, "Connect it below to make it your Main Store — orders will sync here.")), /*#__PURE__*/React.createElement(Button, {
-    variant: "text",
+  }, "Connect it below to make it your Main Store — the source your product data comes from across all your channels.")), /*#__PURE__*/React.createElement(Button, {
     style: {
-      background: '#EDF0F4',
-      color: theme.color.textSecondary,
       flexShrink: 0
     },
     onClick: onSkip
@@ -611,6 +608,14 @@ function MainStoreSelectView({
       marginBottom: 12
     }
   }, "Files"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: theme.color.textSecondary,
+      lineHeight: 1.5,
+      marginBottom: 12,
+      maxWidth: 640
+    }
+  }, "Got a product file from a vendor? Use it as your source of truth — list its products to your marketplaces, and keep inventory & price synced from the file."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexWrap: 'wrap',
