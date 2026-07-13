@@ -97,10 +97,7 @@ class ErrorBoundary extends React.Component {
 // ---------- Icons ----------
 const ICONS = {
   arrowLeft: "M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z",
-  add: "M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z",
-  check: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z",
-  close: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z",
-  info: "M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+  check: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
 };
 function Icon({
   name,
@@ -223,19 +220,6 @@ const STORE_PLATFORMS = [{
   bg: '#000000',
   text: '#fff'
 }];
-const FILES = [{
-  id: 'csv',
-  name: 'CSV File',
-  mono: 'CSV',
-  bg: '#DE4A3B',
-  text: '#fff'
-}, {
-  id: 'gsheet',
-  name: 'Google Sheet',
-  mono: 'GS',
-  bg: '#0F9D58',
-  text: '#fff'
-}];
 const MARKETPLACES = [{
   id: 'tiktok',
   name: 'Tiktok Shop',
@@ -310,17 +294,20 @@ const MARKETPLACES = [{
   bg: '#000000',
   text: '#fff'
 }];
+function isShoppingCart(item) {
+  return STORE_PLATFORMS.some(p => p.id === item.id);
+}
 
-// ---------- Generic select card (rectangle, no arrow, no account badge) ----------
+// ---------- Generic select card (rectangle, no arrow) ----------
 function SelectCard({
   item,
   onClick,
-  dashed = false
+  connected = false
 }) {
   return /*#__PURE__*/React.createElement("div", {
-    className: "lc-card-h",
-    onClick: () => onClick(item),
-    title: item.name,
+    className: connected ? '' : 'lc-card-h',
+    onClick: () => !connected && onClick(item),
+    title: connected ? `${item.name} — your Main Store` : item.name,
     style: {
       display: 'flex',
       alignItems: 'center',
@@ -328,11 +315,11 @@ function SelectCard({
       width: 230,
       height: 88,
       padding: '0 20px',
-      background: '#fff',
-      border: dashed ? `1px dashed ${theme.color.border}` : `1px solid ${theme.color.border}`,
+      background: connected ? '#F3FAF6' : '#fff',
+      border: connected ? `1px solid ${theme.color.success}` : `1px solid ${theme.color.border}`,
       borderRadius: theme.radius,
-      boxShadow: dashed ? 'none' : theme.shadow.card,
-      cursor: 'pointer'
+      boxShadow: connected ? 'none' : theme.shadow.card,
+      cursor: connected ? 'default' : 'pointer'
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -349,16 +336,24 @@ function SelectCard({
       flexShrink: 0,
       border: item.light ? `1px solid ${theme.color.border}` : 'none'
     }
-  }, item.mono), /*#__PURE__*/React.createElement("div", {
+  }, item.mono), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 15,
       fontWeight: 700,
       color: theme.color.textPrimary
     }
-  }, item.name));
+  }, item.name), connected && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      fontWeight: 700,
+      color: theme.color.success,
+      marginTop: 2,
+      letterSpacing: '0.3px'
+    }
+  }, "MAIN STORE")));
 }
 
-// ---------- Connect page (shared by channel and main-store flows) ----------
+// ---------- Connect / authorize page ----------
 function ConnectPage({
   item,
   kind,
@@ -389,7 +384,7 @@ function ConnectPage({
   }, /*#__PURE__*/React.createElement(Icon, {
     name: "arrowLeft",
     size: 16
-  }), " Back to ", isMain ? 'Main Store' : 'channel', " selection")), /*#__PURE__*/React.createElement("div", {
+  }), " Back to channel selection")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       alignItems: 'center',
@@ -449,10 +444,10 @@ function ConnectPage({
   }, "Cancel"))));
 }
 
-// ---------- Step 1: Channel selection ----------
+// ---------- The single channel/store selection screen ----------
 function ChannelSelectView({
-  onSelectChannel,
-  showToast
+  mainStorePlatform,
+  onSelectCard
 }) {
   return /*#__PURE__*/React.createElement("div", {
     style: {
@@ -465,7 +460,27 @@ function ChannelSelectView({
       fontWeight: 700,
       marginBottom: 24
     }
-  }, "Connect Your Channel"), /*#__PURE__*/React.createElement(Card, {
+  }, "Connect Your Channel"), mainStorePlatform && /*#__PURE__*/React.createElement(Card, {
+    style: {
+      padding: '10px 16px',
+      marginBottom: 24,
+      display: 'flex',
+      alignItems: 'center',
+      gap: 10,
+      maxWidth: 560,
+      background: 'rgba(54,179,126,0.06)',
+      border: '1px solid rgba(54,179,126,0.3)'
+    }
+  }, /*#__PURE__*/React.createElement(Icon, {
+    name: "check",
+    size: 16,
+    color: theme.color.success
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: theme.color.textPrimary
+    }
+  }, /*#__PURE__*/React.createElement("b", null, mainStorePlatform.name), " is your Main Store. Now let's connect your first channel.")), /*#__PURE__*/React.createElement(Card, {
     style: {
       padding: '18px 20px',
       marginBottom: 24
@@ -501,7 +516,7 @@ function ChannelSelectView({
   }, MARKETPLACES.map(m => /*#__PURE__*/React.createElement(SelectCard, {
     key: m.id,
     item: m,
-    onClick: onSelectChannel
+    onClick: onSelectCard
   }))), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12,
@@ -520,107 +535,8 @@ function ChannelSelectView({
   }, STORE_PLATFORMS.map(p => /*#__PURE__*/React.createElement(SelectCard, {
     key: p.id,
     item: p,
-    onClick: onSelectChannel
-  }))));
-}
-
-// ---------- Step 2: Main Store selection ----------
-function MainStoreSelectView({
-  channel,
-  onSelectPlatform,
-  onSkip,
-  showToast
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: '24px 40px 40px',
-      animation: 'lc-fade .2s ease'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 20,
-      fontWeight: 700,
-      marginBottom: 24
-    }
-  }, "Choose Your Main Store"), /*#__PURE__*/React.createElement(Card, {
-    style: {
-      padding: '18px 20px',
-      marginBottom: 24,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: 20,
-      flexWrap: 'wrap'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      maxWidth: 560
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 14,
-      fontWeight: 600,
-      marginBottom: 4
-    }
-  }, "Have an existing online store?"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 13,
-      color: theme.color.textSecondary,
-      lineHeight: 1.5
-    }
-  }, "Connect it below — this becomes your Main Store, the source of your product data.")), /*#__PURE__*/React.createElement(Button, {
-    style: {
-      flexShrink: 0
-    },
-    onClick: onSkip
-  }, "Skip - I don't have any of these")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      fontWeight: 700,
-      color: theme.color.textSecondary,
-      textTransform: 'uppercase',
-      letterSpacing: '0.5px',
-      marginBottom: 12
-    }
-  }, "Shopping Carts"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      gap: 14,
-      marginBottom: 28
-    }
-  }, STORE_PLATFORMS.map(p => /*#__PURE__*/React.createElement(SelectCard, {
-    key: p.id,
-    item: p,
-    onClick: onSelectPlatform
-  }))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 12,
-      fontWeight: 700,
-      color: theme.color.textSecondary,
-      textTransform: 'uppercase',
-      letterSpacing: '0.5px',
-      marginBottom: 4
-    }
-  }, "Files"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 13,
-      color: theme.color.textSecondary,
-      lineHeight: 1.5,
-      marginBottom: 12,
-      maxWidth: 640
-    }
-  }, "Have a vendor file? Use it as your source of truth to list products and sync inventory & price to your marketplaces."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      gap: 14
-    }
-  }, FILES.map(f => /*#__PURE__*/React.createElement(SelectCard, {
-    key: f.id,
-    item: f,
-    dashed: true,
-    onClick: fl => showToast(`Opening ${fl.name} import…`)
+    onClick: onSelectCard,
+    connected: !!(mainStorePlatform && mainStorePlatform.id === p.id)
   }))));
 }
 
@@ -634,7 +550,7 @@ function DoneView({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: '55vh',
+      minHeight: '70vh',
       animation: 'lc-fade .2s ease'
     }
   }, /*#__PURE__*/React.createElement(Card, {
@@ -676,204 +592,56 @@ function DoneView({
   }, "Go to Dashboard")));
 }
 
-// ---------- Restart setup confirmation modal ----------
-function RestartModal({
-  open,
-  onCancel,
-  onConfirm
-}) {
-  const [checked, setChecked] = useState(false);
-  useEffect(() => {
-    if (!open) setChecked(false);
-  }, [open]);
-  if (!open) return null;
-  return /*#__PURE__*/React.createElement("div", {
-    onClick: onCancel,
-    style: {
-      position: 'fixed',
-      inset: 0,
-      background: 'rgba(23,43,77,0.45)',
-      zIndex: 50,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    onClick: e => e.stopPropagation(),
-    style: {
-      background: '#fff',
-      borderRadius: 12,
-      width: 480,
-      maxWidth: '90vw',
-      boxShadow: '0 12px 48px rgba(0,0,0,0.25)'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: '20px 24px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 17,
-      fontWeight: 700
-    }
-  }, "Restart Setup?"), /*#__PURE__*/React.createElement("div", {
-    onClick: onCancel,
-    style: {
-      cursor: 'pointer',
-      display: 'flex'
-    }
-  }, /*#__PURE__*/React.createElement(Icon, {
-    name: "close",
-    size: 20,
-    color: theme.color.textSecondary
-  }))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: '0 24px 8px'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 14,
-      color: theme.color.textPrimary,
-      lineHeight: 1.6,
-      marginBottom: 12
-    }
-  }, "This disconnects your current channel and Main Store, and restarts setup from Step 1."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 13,
-      color: theme.color.textSecondary,
-      lineHeight: 1.6,
-      background: '#F8FAFC',
-      border: `1px solid ${theme.color.border}`,
-      borderRadius: 8,
-      padding: '10px 12px',
-      marginBottom: 16
-    }
-  }, "App-based platforms (e.g. Shopify) require uninstalling & reinstalling LitCommerce to reconnect."), /*#__PURE__*/React.createElement("label", {
-    style: {
-      display: 'flex',
-      alignItems: 'flex-start',
-      gap: 8,
-      fontSize: 13,
-      color: theme.color.textPrimary,
-      cursor: 'pointer',
-      lineHeight: 1.5
-    }
-  }, /*#__PURE__*/React.createElement("input", {
-    type: "checkbox",
-    checked: checked,
-    onChange: e => setChecked(e.target.checked),
-    style: {
-      marginTop: 2
-    }
-  }), "I understand this will disconnect everything and restart setup.")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: 16,
-      display: 'flex',
-      justifyContent: 'flex-end',
-      gap: 8,
-      borderTop: `1px solid ${theme.color.border}`,
-      marginTop: 16
-    }
-  }, /*#__PURE__*/React.createElement(Button, {
-    variant: "text",
-    onClick: onCancel
-  }, "Cancel"), /*#__PURE__*/React.createElement(Button, {
-    disabled: !checked,
-    onClick: () => checked && onConfirm(),
-    style: {
-      background: theme.color.error
-    }
-  }, "Restart Setup"))));
-}
-
 // ---------- App ----------
 function App() {
-  const [appStep, setAppStep] = useState(1); // 1 = channel, 2 = main store
   const [view, setView] = useState('select'); // 'select' | 'connecting' | 'done'
-  const [channel, setChannel] = useState(null);
   const [mainStorePlatform, setMainStorePlatform] = useState(null);
+  const [channel, setChannel] = useState(null);
   const [pendingConnect, setPendingConnect] = useState(null);
-  const [restartOpen, setRestartOpen] = useState(false);
   const [toast, setToast] = useState(null);
   useEffect(() => {
     if (!toast) return;
     const t = setTimeout(() => setToast(null), 2400);
     return () => clearTimeout(t);
   }, [toast]);
-  function handleSelectChannel(c) {
-    setPendingConnect(c);
+  function handleSelectCard(item) {
+    setPendingConnect(item);
     setView('connecting');
   }
-  function handleAuthorizeChannel(c) {
-    setChannel(c);
-    setPendingConnect(null);
-    setAppStep(2);
-    setView('select');
-  }
-  function handleBackFromChannelConnect() {
+  function handleBackFromConnect() {
     setPendingConnect(null);
     setView('select');
   }
-  function handleSelectMainStorePlatform(p) {
-    setPendingConnect(p);
-    setView('connecting');
+  function handleAuthorize(item) {
+    if (isShoppingCart(item) && !mainStorePlatform) {
+      setMainStorePlatform(item);
+      setPendingConnect(null);
+      setView('select');
+      setToast(`🎉 ${item.name} connected as your Main Store — now pick your first channel.`);
+    } else {
+      setChannel(item);
+      setPendingConnect(null);
+      setView('done');
+    }
   }
-  function handleAuthorizeMainStore(p) {
-    setMainStorePlatform(p);
-    setPendingConnect(null);
-    setView('done');
-  }
-  function handleSkipMainStore() {
-    setMainStorePlatform(null);
-    setView('done');
-  }
-  function handleBackFromMainConnect() {
-    setPendingConnect(null);
-    setView('select');
-  }
-  function handleRestartConfirm() {
-    setChannel(null);
-    setMainStorePlatform(null);
-    setPendingConnect(null);
-    setAppStep(1);
-    setView('select');
-    setRestartOpen(false);
-    setToast('Setup restarted — choose a new channel.');
-  }
+  const willBecomeMainStore = !!(pendingConnect && isShoppingCart(pendingConnect) && !mainStorePlatform);
   return /*#__PURE__*/React.createElement("div", {
     style: {
       minHeight: '100vh',
       background: theme.color.bg,
       fontFamily: theme.font
     }
-  }, appStep === 1 && view === 'select' && /*#__PURE__*/React.createElement(ChannelSelectView, {
-    onSelectChannel: handleSelectChannel,
-    showToast: setToast
-  }), appStep === 1 && view === 'connecting' && pendingConnect && /*#__PURE__*/React.createElement(ConnectPage, {
+  }, view === 'select' && /*#__PURE__*/React.createElement(ChannelSelectView, {
+    mainStorePlatform: mainStorePlatform,
+    onSelectCard: handleSelectCard
+  }), view === 'connecting' && pendingConnect && /*#__PURE__*/React.createElement(ConnectPage, {
     item: pendingConnect,
-    kind: "channel",
-    onAuthorize: handleAuthorizeChannel,
-    onBack: handleBackFromChannelConnect
-  }), appStep === 2 && view === 'select' && /*#__PURE__*/React.createElement(MainStoreSelectView, {
-    channel: channel,
-    onSelectPlatform: handleSelectMainStorePlatform,
-    onSkip: handleSkipMainStore,
-    showToast: setToast
-  }), appStep === 2 && view === 'connecting' && pendingConnect && /*#__PURE__*/React.createElement(ConnectPage, {
-    item: pendingConnect,
-    kind: "main-store",
-    onAuthorize: handleAuthorizeMainStore,
-    onBack: handleBackFromMainConnect
+    kind: willBecomeMainStore ? 'main-store' : 'channel',
+    onAuthorize: handleAuthorize,
+    onBack: handleBackFromConnect
   }), view === 'done' && /*#__PURE__*/React.createElement(DoneView, {
     channel: channel,
     mainStorePlatform: mainStorePlatform
-  }), /*#__PURE__*/React.createElement(RestartModal, {
-    open: restartOpen,
-    onCancel: () => setRestartOpen(false),
-    onConfirm: handleRestartConfirm
   }), toast && /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
