@@ -424,14 +424,14 @@ function ConnectPage({
       lineHeight: 1.6,
       marginBottom: 24
     }
-  }, isMain ? /*#__PURE__*/React.createElement(React.Fragment, null, "Setting ", /*#__PURE__*/React.createElement("b", null, item.name), " as your Main Store — orders will sync here. You'll be redirected to authorize LitCommerce.") : /*#__PURE__*/React.createElement(React.Fragment, null, "Connecting ", /*#__PURE__*/React.createElement("b", null, item.name), " as your first channel. You'll be redirected to authorize LitCommerce.")), /*#__PURE__*/React.createElement(Button, {
+  }, isMain ? /*#__PURE__*/React.createElement(React.Fragment, null, "We'll set ", /*#__PURE__*/React.createElement("b", null, item.name), " as your Main Store — this is where your product details will come from. You'll be taken to ", item.name, " to log in and approve the connection.") : /*#__PURE__*/React.createElement(React.Fragment, null, "We'll connect ", /*#__PURE__*/React.createElement("b", null, item.name), " as your first channel so you can start selling there. You'll be taken to ", item.name, " to log in and approve the connection.")), /*#__PURE__*/React.createElement(Button, {
     fullWidth: true,
     style: {
       background: item.bg,
       color: item.text
     },
     onClick: () => onAuthorize(item)
-  }, "Authorize with ", item.name), /*#__PURE__*/React.createElement("div", {
+  }, "Continue to ", item.name), /*#__PURE__*/React.createElement("div", {
     onClick: onBack,
     className: "lc-nav",
     style: {
@@ -503,7 +503,7 @@ function ChannelSelectView({
       fontWeight: 700,
       marginBottom: 24
     }
-  }, mainStorePlatform ? 'Connect First Channel' : 'Connect First Integration'), mainStorePlatform && /*#__PURE__*/React.createElement(Card, {
+  }, mainStorePlatform ? 'Connect Your First Channel' : 'Connect Your First Platform'), mainStorePlatform && /*#__PURE__*/React.createElement(Card, {
     style: {
       padding: '10px 16px',
       marginBottom: 24,
@@ -523,15 +523,7 @@ function ChannelSelectView({
       fontSize: 13,
       color: theme.color.textPrimary
     }
-  }, "🎉 ", /*#__PURE__*/React.createElement("b", null, mainStorePlatform.name), " is connected as your Main Store — let's connect your first channel next.")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 14,
-      color: theme.color.textSecondary,
-      lineHeight: 1.5,
-      marginBottom: 24,
-      maxWidth: 640
-    }
-  }, mainStorePlatform ? 'Pick a platform to connect as your first channel — where you\'ll actually list and sell products.' : 'Connect a platform to get started. Marketplaces become your first channel; shopping carts become your Main Store if connected first.'), /*#__PURE__*/React.createElement("div", {
+  }, "🎉 ", /*#__PURE__*/React.createElement("b", null, mainStorePlatform.name), " is now your Main Store! Next, let's pick where you'll start selling.")), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12,
       fontWeight: 700,
@@ -542,11 +534,7 @@ function ChannelSelectView({
     }
   }, "Marketplaces"), /*#__PURE__*/React.createElement(SectionHint, {
     tone: "primary"
-  }, "Connect one of these to make it your ", /*#__PURE__*/React.createElement("b", {
-    style: {
-      color: theme.color.primary
-    }
-  }, "first channel"), " — where you'll list and sell products."), /*#__PURE__*/React.createElement("div", {
+  }, "Connect one marketplace to get started with LitCommerce. This will be your first sales channel, and you can add more channels anytime later."), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexWrap: 'wrap',
@@ -568,15 +556,11 @@ function ChannelSelectView({
     }
   }, "Shopping Carts"), /*#__PURE__*/React.createElement(SectionHint, {
     tone: "success"
-  }, mainStorePlatform ? /*#__PURE__*/React.createElement(React.Fragment, null, "Connect one of these as your ", /*#__PURE__*/React.createElement("b", {
+  }, mainStorePlatform ? /*#__PURE__*/React.createElement(React.Fragment, null, "Want to sell here too? ", /*#__PURE__*/React.createElement("b", {
     style: {
       color: theme.color.success
     }
-  }, "first channel"), " — ", mainStorePlatform.name, " is already your Main Store.") : /*#__PURE__*/React.createElement(React.Fragment, null, "If you connect one of these ", /*#__PURE__*/React.createElement("b", {
-    style: {
-      color: theme.color.success
-    }
-  }, "first"), ", it becomes your Main Store — not your first channel. You'll pick a channel to sell on next.")), /*#__PURE__*/React.createElement("div", {
+  }, mainStorePlatform.name), " is already your Main Store, so this would become your first sales channel.") : /*#__PURE__*/React.createElement(React.Fragment, null, "Connect your online store first and we'll set it as your Main Store — the source of truth for your product data, and orders can be synced here for fulfillment. After that, you can connect marketplaces and other sales channels.")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       flexWrap: 'wrap',
@@ -606,7 +590,7 @@ function ChooseMainStoreView({
       fontWeight: 700,
       marginBottom: 24
     }
-  }, "Choose Your Main Store"), channel && /*#__PURE__*/React.createElement(Card, {
+  }, "Set Up Your Main Store"), channel && /*#__PURE__*/React.createElement(Card, {
     style: {
       padding: '10px 16px',
       marginBottom: 24,
@@ -626,7 +610,7 @@ function ChooseMainStoreView({
       fontSize: 13,
       color: theme.color.textPrimary
     }
-  }, /*#__PURE__*/React.createElement("b", null, channel.name), " is your first channel. Now let's set up your Main Store.")), /*#__PURE__*/React.createElement(Card, {
+  }, "🎉 ", /*#__PURE__*/React.createElement("b", null, channel.name), " is ready as your first channel. Next, let's set up your Main Store.")), /*#__PURE__*/React.createElement(Card, {
     style: {
       padding: '18px 20px',
       marginBottom: 24,
@@ -646,13 +630,13 @@ function ChooseMainStoreView({
       fontWeight: 600,
       marginBottom: 4
     }
-  }, "Have an existing online store?"), /*#__PURE__*/React.createElement("div", {
+  }, "Do you already have an online store?"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 13,
       color: theme.color.textSecondary,
       lineHeight: 1.5
     }
-  }, "Connect it below — this becomes your Main Store, the source of your product data.")), /*#__PURE__*/React.createElement(Button, {
+  }, "Connect it below and we'll use it as your Main Store — the source of truth for your product data. Orders can be synced here for fulfillment.")), /*#__PURE__*/React.createElement(Button, {
     style: {
       flexShrink: 0
     },
@@ -682,7 +666,8 @@ function ChooseMainStoreView({
 // ---------- Completion screen ----------
 function DoneView({
   channel,
-  mainStorePlatform
+  mainStorePlatform,
+  onRestart
 }) {
   return /*#__PURE__*/React.createElement("div", {
     style: {
@@ -726,8 +711,9 @@ function DoneView({
       lineHeight: 1.6,
       marginBottom: 20
     }
-  }, /*#__PURE__*/React.createElement("b", null, channel && channel.name), " is your first channel", mainStorePlatform ? /*#__PURE__*/React.createElement(React.Fragment, null, " and ", /*#__PURE__*/React.createElement("b", null, mainStorePlatform.name), " is your Main Store") : '', ". Add more channels anytime from the LitCommerce Dashboard."), /*#__PURE__*/React.createElement(Button, {
-    fullWidth: true
+  }, "You're ready to start selling on ", /*#__PURE__*/React.createElement("b", null, channel && channel.name), mainStorePlatform ? /*#__PURE__*/React.createElement(React.Fragment, null, ", with ", /*#__PURE__*/React.createElement("b", null, mainStorePlatform.name), " as your Main Store") : '', ". Whenever you're ready, you can connect more channels from your LitCommerce Dashboard."), /*#__PURE__*/React.createElement(Button, {
+    fullWidth: true,
+    onClick: onRestart
   }, "Go to Dashboard")));
 }
 
@@ -761,6 +747,13 @@ function App() {
   function handleSkipMainStore() {
     setView('done');
   }
+  function handleRestart() {
+    setMainStorePlatform(null);
+    setChannel(null);
+    setPendingConnect(null);
+    setConnectFrom('channel');
+    setView('select');
+  }
   function handleAuthorize(item) {
     if (connectFrom === 'main-store') {
       // explicitly chosen on the Choose Your Main Store step
@@ -774,7 +767,7 @@ function App() {
       setMainStorePlatform(item);
       setPendingConnect(null);
       setView('select');
-      setToast(`🎉 ${item.name} is now connected as your Main Store!`);
+      setToast(`🎉 ${item.name} is now your Main Store!`);
     } else {
       // becomes the first channel
       setChannel(item);
@@ -804,7 +797,8 @@ function App() {
     onSkip: handleSkipMainStore
   }), view === 'done' && /*#__PURE__*/React.createElement(DoneView, {
     channel: channel,
-    mainStorePlatform: mainStorePlatform
+    mainStorePlatform: mainStorePlatform,
+    onRestart: handleRestart
   }), toast && /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
